@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../admin.lapotion.app/.idea/admin.lapotion.app.iml" filepath="$PROJECT_DIR$/../admin.lapotion.app/.idea/admin.lapotion.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/../api.lapotion.app/.idea/api.lapotion.app.iml" filepath="$PROJECT_DIR$/../api.lapotion.app/.idea/api.lapotion.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/application.lapotion.app.iml" filepath="$PROJECT_DIR$/.idea/application.lapotion.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../../workspace-epsi-B2/infrastructure/.idea/infrapartner.iml" filepath="$PROJECT_DIR$/../../../workspace-epsi-B2/infrastructure/.idea/infrapartner.iml" />
