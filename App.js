@@ -1,28 +1,44 @@
-import { useNetInfo } from "@react-native-community/netinfo";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { initCartes, getCartes } from "./utils/Cartes";
+import { initCartes, LOCAL } from "./utils/Cartes";
+import { NavigationContainer } from "@react-navigation/native";
+import Game from './utils/Game'
+import MouseMemoirs from './fonts/Mouse Memoirs.ttf'
+
+import * as Font from 'expo-font';
+
+import Navigator from "./components/Navigator"
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
+    Game.clear()
     initCartes();
-    // this.state = {
-    //   cartes: {},
-    // };
   }
-  // componentDidMount() {
-  // getCartes().then((data) => {
-  //   this.setState({ cartes: data });
-  // });
-  // }
+
+  state = {
+    fontsLoaded: false,
+  };
+
+  async loadFonts() {
+    await Font.loadAsync({
+      'Mouse Memoirs': MouseMemoirs,
+    });
+    this.setState({ fontsLoaded: true });
+  }
+
+  componentDidMount() {
+    this.loadFonts();
+  }
 
   render() {
+    if (!this.state.fontsLoaded) return null
     return (
-      <View style={styles.container}>
-        <StatusBar style="auto" />
-      </View>
+    <NavigationContainer>
+      <StatusBar style="auto" />
+      <Navigator />
+    </NavigationContainer>
     );
   }
 }

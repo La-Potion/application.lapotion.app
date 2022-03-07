@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "application.lapotion.app",
-    "slug": "applicationlapotionapp",
+    "name": "La Potion",
+    "slug": "lapotion",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#07B4A3"
     },
     "updates": {
@@ -23,7 +23,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#07B4A3"
-      }
+      },
+      "package": "com.netinq.applicationlapotionapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"

@@ -2,14 +2,24 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
 
 export async function initCartes() {
-  const date = new Date();
   if (!(await NetworkUtils.isNetworkAvailable())) return;
   if ((await LOCAL.getCartes()) == null) {
     await API.getAllCards((data) => LOCAL.setCartes(data));
   } else {
-    await API.getUpdate((data) =>
-      data.forEach((card) => LOCAL.addCartes(card))
-    );
+    const cartes = await LOCAL.getCartes();
+    await API.getUpdate(async (data) => {
+        data.map(async (card) => {
+          let updated = false
+          cartes.forEach((carte, index) => {
+            if (carte.id == card.id) {
+              updated = true
+              cartes[index] = card
+            }
+          });
+          if (!updated) cartes.push(card)
+        })
+        await LOCAL.setCartes(cartes)
+    });
   }
 }
 
@@ -49,10 +59,19 @@ class API {
   }
 }
 
-class LOCAL {
+export class LOCAL {
   static async getCartes() {
     const cartes = await AsyncStorage.getItem("@cartes");
     return JSON.parse(cartes);
+  }
+
+  static async getCartesByMode(mode) {
+    let cartes = await LOCAL.getCartes()
+    cartes = cartes.filter((carte) => {
+      const modes = carte.mode_cartes ? carte.mode_cartes.filter((mode_cartes) => {return mode_cartes.mode_id === mode})[0] : 0
+      return modes && modes.mode_id === mode
+    })
+    return cartes
   }
 
   static async setCartes(json) {
@@ -64,7 +83,6 @@ class LOCAL {
   static async addCartes(json) {
     const cards = await this.getCartes();
     cards.push(json);
-    console.log(cards);
     await AsyncStorage.setItem("@cartes", JSON.stringify(cards));
     const date = new Date();
     await AsyncStorage.setItem("@last_update", date.toISOString());
