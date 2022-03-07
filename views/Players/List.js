@@ -131,17 +131,19 @@ export default class HomeScreen extends React.Component {
     }
 
     async addPlayer(value) {
-        if (!value){
+        if (!value && (!this.state.players || this.state.players.length <= 1)){
             this.setState({emptyPlayer: true})
             return
         }
+        if (!value) return
         const players = this.state.players ? this.state.players : new Array()
         players.push(value)
         this.setState({
             players: players,
             forceRefresh: Math.floor(Math.random() * 100),
             text: '',
-            select: false
+            select: false,
+            emptyPlayer: false
         })
         await this.updateGamePlayer()
     }
@@ -206,6 +208,7 @@ export default class HomeScreen extends React.Component {
                             onEndEditing={async () => await this.addPlayer(this.state.text)}
                             onChangeText={text => this.changeText(text)}
                             value={this.state.text}
+                            key={this.state.forceRefresh}
                             maxLength={25}
                          />
                         {this.state.select ? <Pressable style={styles.checkButton} onPress={async () => await this.addPlayer(this.state.text)}>
