@@ -3,6 +3,7 @@ import {View, Image, StyleSheet, Text, Button, Pressable} from "react-native";
 import modePicoletro from "../../assets/Modes_picoletro.png";
 import modeGlouglou from "../../assets/Modes_glouglou.png";
 import modeAvale from "../../assets/Modes_avale.png";
+import logo from "../../assets/logo.png";
 import bulles_left from "../../assets/bulles_left.png";
 import bulles_right from "../../assets/bulles_right.png";
 import Game from "../../utils/Game";
@@ -13,7 +14,6 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
         borderRadius: 15,
-        overflow: 'hidden',
         alignItems: 'center',
         justifyContent: 'space-between',
         backgroundColor: '#ffffff',
@@ -22,6 +22,10 @@ const styles = StyleSheet.create({
         marginTop: 25,
         paddingVertical: 25,
         paddingHorizontal: 15
+    },
+    contentLA: {
+        justifyContent: 'center',
+        backgroundColor: '#F3A345',
     },
     subContent: {
         width: '100%',
@@ -34,17 +38,37 @@ const styles = StyleSheet.create({
         fontFamily: 'Mouse Memoirs',
         marginBottom: 10
     },
+    titleLA: {
+        color: '#FFFFFF',
+        fontSize: 45,
+        fontFamily: 'Mouse Memoirs',
+        marginBottom: 10,
+        marginTop: 25
+    },
     question: {
         color: '#494949',
         fontSize: 25,
         fontFamily: 'Mouse Memoirs',
         textAlign: 'center'
     },
+    questionLA: {
+        color: '#FFFFFF',
+        fontSize: 25,
+        fontFamily: 'Mouse Memoirs',
+        textAlign: 'center'
+    },
     subixTitle: {
-        color: '#F79329',
+        color: '#e79943',
         fontSize: 25,
         fontFamily: 'Mouse Memoirs',
         marginBottom: 5,
+    },
+    subixTitleLA: {
+        color: '#FFFFFF',
+        fontSize: 25,
+        fontFamily: 'Mouse Memoirs',
+        marginBottom: 5,
+        marginTop: 25
     },
     subix: {
         color: '#494949',
@@ -52,9 +76,21 @@ const styles = StyleSheet.create({
         fontFamily: 'Mouse Memoirs',
         textAlign: 'center'
     },
+    subixLA: {
+        color: '#FFFFFF',
+        fontSize: 20,
+        fontFamily: 'Mouse Memoirs',
+        textAlign: 'center'
+    },
     icon: {
         height: 35,
-        width: 35
+        width: 35,
+    },
+    iconLA: {
+        height: 100,
+        width: 100,
+        position: 'absolute',
+        top: -50
     },
     bulles_left: {
         height: 75,
@@ -69,6 +105,14 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: '15%',
         right: 15
+    },
+    bulles_rightLA: {
+        height: 75,
+        width: 55,
+        position: 'absolute',
+        bottom: '15%',
+        right: 15,
+        opacity: 0.4
     }
 });
 
@@ -81,6 +125,7 @@ export default class HomeScreen extends React.Component {
             question: params.question,
             subix: params.subix,
             mode: props.mode,
+            type: props.type
         };
     }
 
@@ -119,17 +164,20 @@ export default class HomeScreen extends React.Component {
 
     render() {
         return (
-            <View style={styles.content}>
+            <View style={[styles.content, this.state.type == 'LA' && styles.contentLA]}>
                 <Image style={styles.bulles_left} source={bulles_left} />
-                <Image style={styles.bulles_right} source={bulles_right} />
-                <Image style={styles.icon} source={this.state.mode == 1 ? modeGlouglou : this.state.mode == 2 ? modePicoletro : modeAvale } />
+                <Image style={this.state.type == 'LA' ? styles.bulles_rightLA : styles.bulles_right} source={bulles_right} />
+                <Image
+                    style={this.state.type == "LA" ? styles.iconLA : styles.icon}
+                    source={this.state.type == "LA" ? logo : this.state.mode == 1 ? modeGlouglou : this.state.mode == 2 ? modePicoletro : modeAvale }
+                />
                 <View style={styles.subContent}>
-                    <Text style={styles.title}>{this.state.title}</Text>
-                    <Text style={styles.question}>{this.state.question}</Text>
+                    <Text style={this.state.type == 'LA' ? styles.titleLA : styles.title}>{this.state.title}</Text>
+                    <Text style={this.state.type == 'LA' ? styles.questionLA : styles.question}>{this.state.question}</Text>
                 </View>
                 <View style={styles.subContent}>
-                    <Text style={styles.subixTitle}>{this.state.subix && 'La punition'}</Text>
-                    <Text style={styles.subix}>{this.state.subix}</Text>
+                    <Text style={this.state.type == 'LA' ? styles.subixTitleLA : styles.subixTitle}>{this.state.subix && 'La punition'}</Text>
+                    <Text style={this.state.type == 'LA' ? styles.subixLA : styles.subix}>{this.state.subix}</Text>
                 </View>
             </View>
         );
