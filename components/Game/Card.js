@@ -10,8 +10,8 @@ import { LOCAL } from '../../utils/Cartes'
 
 const styles = StyleSheet.create({
     content: {
-        height: '65%',
-        width: '80%',
+        height: '100%',
+        width: '100%',
         borderRadius: 15,
         overflow: 'hidden',
         alignItems: 'center',

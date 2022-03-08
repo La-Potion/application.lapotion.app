@@ -10,6 +10,7 @@ import al from "../../assets/al.png";
 import start from "../../assets/start.png";
 import {LinearGradient} from "expo-linear-gradient";
 import player from "../../assets/player.png";
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
 const styles = StyleSheet.create({
     content: {
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
     },
     pressLeft: {
         height: '55%',
-        width: 25,
+        width: 35,
         backgroundColor: '#ffffff',
         borderTopRightRadius: 15,
         borderBottomRightRadius: 15,
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
     },
     pressRight: {
         height: '55%',
-        width: 25,
+        width: 35,
         backgroundColor: '#ffffff',
         borderTopLeftRadius: 15,
         borderBottomLeftRadius: 15,
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
     },
     contentPlayer: {
         height: 75,
-        width: '80%',
+        width: '75%',
         borderRadius: 15,
         overflow: 'hidden'
     },
@@ -78,6 +79,14 @@ const styles = StyleSheet.create({
         width: 35,
         position: 'absolute',
         left: 15
+    },
+    drag: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 25,
+        position: 'relative',
+        height: '65%',
+        width: '75%'
     },
 });
 
@@ -148,18 +157,20 @@ export default class HomeScreen extends React.Component {
                 this.state.historyCounter.set(target, this.state.historyCounter.get(target)+1) :
                 this.state.historyCounter.set(target, 1))
             if (!history[carteIndex]) history.push(target)
-            console.log(historyCounter)
             this.setState({target: target, historyCounter: historyCounter, history: history})
         }
     }
 
     randomPlayer() {
         const player = this.state.game.players[Math.floor(Math.random() * this.state.game.players.length)]
-
         return player
     }
 
     render() {
+        const config = {
+            velocityThreshold: 0.2,
+            directionalOffsetThreshold: 50
+        };
         return (
             <View style={styles.content}>
                 <Header navigation={this.navigation} destination={'PlayersList'} title={'La Potion'} />
@@ -171,15 +182,22 @@ export default class HomeScreen extends React.Component {
                         <Text style={styles.namePlayer}>{this.state.target}</Text>
                     </LinearGradient>
                 </View>
-                <GameCard
-                    type={this.state.cartes[this.state.carteIndex].type.type_ref}
-                    title={this.state.cartes[this.state.carteIndex].type.name}
-                    question={this.state.cartes[this.state.carteIndex].question}
-                    subix={this.state.cartes[this.state.carteIndex].subix}
-                    key={this.state.forceRefresh}
-                    mode={this.state.game.mode}
-                    players={this.state.game.players}
-                />
+                <GestureRecognizer
+                    style={styles.drag}
+                    onSwipeLeft={() => this.nextCard()}
+                    onSwipeRight={() => this.prevCard()}
+                    config={config}
+                >
+                    <GameCard
+                        type={this.state.cartes[this.state.carteIndex].type.type_ref}
+                        title={this.state.cartes[this.state.carteIndex].type.name}
+                        question={this.state.cartes[this.state.carteIndex].question}
+                        subix={this.state.cartes[this.state.carteIndex].subix}
+                        key={this.state.forceRefresh}
+                        mode={this.state.game.mode}
+                        players={this.state.game.players}
+                    />
+                </GestureRecognizer>
                 {
                     this.state.carteIndex >= 1 &&
                     <TouchableOpacity onPress={() => this.prevCard()} style={styles.pressLeft}>
