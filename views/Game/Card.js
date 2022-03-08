@@ -192,6 +192,7 @@ export default class HomeScreen extends React.Component {
                         type={this.state.cartes[this.state.carteIndex].type.type_ref}
                         title={this.state.cartes[this.state.carteIndex].type.name}
                         question={this.state.cartes[this.state.carteIndex].question}
+                        question_bis={this.state.cartes[this.state.carteIndex].question_bis}
                         subix={this.state.cartes[this.state.carteIndex].subix}
                         key={this.state.forceRefresh}
                         mode={this.state.game.mode}

@@ -27,6 +27,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#F3A345',
     },
+    contentTA: {
+        justifyContent: 'center',
+    },
+    subContentTA: {
+        marginVertical: 10
+    },
     subContent: {
         width: '100%',
         alignItems: 'center',
@@ -123,6 +129,7 @@ export default class HomeScreen extends React.Component {
         this.state = {
             title: props.title,
             question: params.question,
+            question_bis: props.question_bis,
             subix: params.subix,
             mode: props.mode,
             type: props.type
@@ -164,7 +171,9 @@ export default class HomeScreen extends React.Component {
 
     render() {
         return (
-            <View style={[styles.content, this.state.type == 'LA' && styles.contentLA]}>
+            <View style={[styles.content,
+                this.state.type == 'LA' && styles.contentLA,
+                this.state.type == 'TA' && styles.contentTA]}>
                 <Image style={styles.bulles_left} source={bulles_left} />
                 <Image style={this.state.type == 'LA' ? styles.bulles_rightLA : styles.bulles_right} source={bulles_right} />
                 <Image
@@ -172,13 +181,22 @@ export default class HomeScreen extends React.Component {
                     source={this.state.type == "LA" ? logo : this.state.mode == 1 ? modeGlouglou : this.state.mode == 2 ? modePicoletro : modeAvale }
                 />
                 <View style={styles.subContent}>
-                    <Text style={this.state.type == 'LA' ? styles.titleLA : styles.title}>{this.state.title}</Text>
+                    <Text style={this.state.type == 'LA' ? styles.titleLA : styles.title}>
+                        {this.state.type == "TA" ? 'Tasume' : this.state.title}
+                    </Text>
                     <Text style={this.state.type == 'LA' ? styles.questionLA : styles.question}>{this.state.question}</Text>
                 </View>
                 <View style={styles.subContent}>
                     <Text style={this.state.type == 'LA' ? styles.subixTitleLA : styles.subixTitle}>{this.state.subix && 'La punition'}</Text>
                     <Text style={this.state.type == 'LA' ? styles.subixLA : styles.subix}>{this.state.subix}</Text>
                 </View>
+                {
+                    this.state.type == 'TA' &&
+                    <View style={[styles.subContent]}>
+                        <Text style={styles.title}>ou Tasumepa</Text>
+                        <Text style={styles.question}>{this.state.question_bis}</Text>
+                    </View>
+                }
             </View>
         );
     }
