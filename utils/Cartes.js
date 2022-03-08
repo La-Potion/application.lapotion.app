@@ -6,7 +6,7 @@ export async function initCartes() {
   if ((await LOCAL.getCartes()) == null) {
     await API.getAllCards((data) => LOCAL.setCartes(data));
   } else {
-    const cartes = await LOCAL.getCartes();
+    let cartes = await LOCAL.getCartes();
     await API.getUpdate(async (data) => {
         data.map(async (card) => {
           let updated = false
@@ -20,6 +20,14 @@ export async function initCartes() {
         })
         await LOCAL.setCartes(cartes)
     });
+    await API.getIDs(async (objects) => {
+      const ids = new Array();
+      await objects.map(async (object) => ids.push(object.id))
+      cartes = cartes.filter((carte, i) => {
+        return ids.includes(carte.id)
+      })
+      await LOCAL.setCartes(cartes)
+    })
   }
 }
 
@@ -28,8 +36,22 @@ class API {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "https://api.lapotion.app/cartes");
     xhr.setRequestHeader(
-      "app-token",
-      "MSVNQZXSd8WGaDhcMzXngDQnwE2JQzuf4xRzc9eyMfhrVEgzacvBBZ4xrWhftHkF8PS6E2qVCBf8ezfUEBvQf4BQ4SXVw5XppAZFbGYRZaJsRKFg4dfJ5fQrrWWmXfRt"
+        "app-token",
+        "MSVNQZXSd8WGaDhcMzXngDQnwE2JQzuf4xRzc9eyMfhrVEgzacvBBZ4xrWhftHkF8PS6E2qVCBf8ezfUEBvQf4BQ4SXVw5XppAZFbGYRZaJsRKFg4dfJ5fQrrWWmXfRt"
+    );
+    xhr.onload = (e) => {
+      let res = xhr.response;
+      let json = JSON.parse(res);
+      callback(json);
+    };
+    xhr.send();
+  }
+  static async getIDs(callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://api.lapotion.app/getIDs");
+    xhr.setRequestHeader(
+        "app-token",
+        "MSVNQZXSd8WGaDhcMzXngDQnwE2JQzuf4xRzc9eyMfhrVEgzacvBBZ4xrWhftHkF8PS6E2qVCBf8ezfUEBvQf4BQ4SXVw5XppAZFbGYRZaJsRKFg4dfJ5fQrrWWmXfRt"
     );
     xhr.onload = (e) => {
       let res = xhr.response;
